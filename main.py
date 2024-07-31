@@ -1,5 +1,6 @@
 import numpy as np
 import random
+import matplotlib.pyplot as plt
 
 def read_map(path):
     return None
@@ -73,9 +74,39 @@ def is_solvable(m):
             if new_pos not in visited_pos:
                 visited_pos[new_pos] = 1
                 tree.append((new_pos, depth+1))
-    return -1
+    return float("NaN")
+
+size = 5
+N = 10000           # how many maps to generate for each p
+res = 100           # how many p interval to test
+results = np.zeros((res, N))
+
+for k in range(res):
+    p = k/res
+    for i in range(N):
+        m = create_map(size, p)
+        results[k, i] = is_solvable(m)
+    print(p)
+
+solvable = np.zeros(res)
+solvable_mean = np.zeros(res)
+solvable_median = np.zeros(res)
+
+for k in range(res):
+    current_res = results[k,]
+    current_res_solvable = np.invert(np.isnan(current_res))
+    solvable[k] = (current_res[current_res_solvable]).sum()
+    solvable_mean[k] = np.mean(current_res[current_res_solvable])
+    solvable_median[k] = np.median(current_res[current_res_solvable])
 
 
-m = create_map(2,1)
+solvable = solvable/N
 
-print(is_solvable(m))
+
+
+plt.plot(solvable_mean, '#00dd00', solvable_median, '#007700', solvable, '#dd0000')
+plt.show()
+
+
+
+np.savetxt('data.csv', results, delimiter=',')
