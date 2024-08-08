@@ -147,22 +147,32 @@ print(is_solvable(m))
 
 write_map(m, "maps/", 1)'''
 
-m = text_to_map(""" w  
-w   
-    
-ww o
-  w 
-www 
- w  
+# test map in old format
+'''m = text_to_map(""" w w
  w w
-  w 
- www
-  ww
- ww 
- www
+    
+www 
+    
    w
-w w 
+w   
+ w w
+ w w
+ ww 
+ w  
+ww  
 w  w
-""")
+    
+ o  
+ w w""")
+write_map(m, 'maps/', 'old-26')'''
 
-write_map(m, 'maps/', 'old-4')
+k = 20
+n = 3
+while k<27:
+    m = create_map(n, 0.25)
+    s = is_solvable(m)
+    if s>7:
+        name = 'new-'+str(k)+'_'+str(s)
+        print('{},{},{}-new-{}_{}'.format(n,s,n,k,s))
+        write_map(m, 'maps/', 'new-'+str(k)+'_'+str(s))
+        k += 1
